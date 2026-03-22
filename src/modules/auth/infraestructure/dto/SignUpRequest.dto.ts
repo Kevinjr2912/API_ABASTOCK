@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsNotEmpty, MinLength, MaxLength, Matches, IsUUID } from 'class-validator';
+import { IsString, IsEmail, IsNotEmpty, MinLength, MaxLength, Matches, IsUUID, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { SignUpDto } from '../../application/dtos/input/SignUp.dto';
 
@@ -13,9 +13,9 @@ export class SignUpRequestDto implements SignUpDto {
     firstName: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     @Transform(({ value }) => value?.trim())
-    middleName: string;
+    middleName?: string;
 
     @IsString()
     @IsNotEmpty()

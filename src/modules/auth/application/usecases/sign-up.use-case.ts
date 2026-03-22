@@ -28,7 +28,7 @@ export class SignUpUseCase {
     return new User(
       dto.id,
       dto.firstName,
-      dto.middleName,
+      dto.middleName ?? null,
       dto.firstSurname,
       dto.secondLastName,
       dto.phoneNumber,

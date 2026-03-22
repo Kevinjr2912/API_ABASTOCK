@@ -2,7 +2,7 @@ export class User {
     constructor (
         private readonly id: string,
         private readonly firstName: string,
-        private readonly middleName: string, 
+        private readonly middleName: string | null,
         private readonly firstSurname: string,
         private readonly secondLastName: string,
         private readonly phoneNumber: string,

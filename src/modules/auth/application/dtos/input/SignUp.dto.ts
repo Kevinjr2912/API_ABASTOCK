@@ -1,7 +1,7 @@
 export class SignUpDto {
     id:             string
     firstName:      string
-    middleName:     string
+    middleName?:    string | null
     firstSurname:   string
     secondLastName: string
     phoneNumber:    string

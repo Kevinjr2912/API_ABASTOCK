@@ -4,7 +4,7 @@ export class SignUpCommand extends Command <{ actionId: string }> {
     constructor (
         public readonly id:             string,
         public readonly firstName:      string,
-        public readonly middleName:     string,
+        public readonly middleName:     string | null,
         public readonly firstSurname:   string,
         public readonly secondLastName: string,
         public readonly phoneNumber:    string,
