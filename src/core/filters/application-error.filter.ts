@@ -18,6 +18,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     [ERROR_CODES.SESSION_INVALID]: HttpStatus.UNAUTHORIZED,
     [ERROR_CODES.SESSION_EXPIRED]: HttpStatus.UNAUTHORIZED,
     [ERROR_CODES.SESSION_NOT_FOUND]: HttpStatus.NOT_FOUND, 
+    [ERROR_CODES.EXISTING_STORE]: HttpStatus.CONFLICT,
   };
 
   catch(exception: unknown, host: ArgumentsHost) {

@@ -8,7 +8,7 @@ export class SignUpCommandHandler implements ICommandHandler<SignUpCommand> {
     private readonly signUpUseCase: SignUpUseCase
   ) {}
 
-  async execute(command: SignUpCommand): Promise<{ actionId: string }> {
+  async execute(command: SignUpCommand): Promise<void> {
     await this.signUpUseCase.execute({
       id: command.id,
       firstName: command.firstName,
@@ -19,7 +19,5 @@ export class SignUpCommandHandler implements ICommandHandler<SignUpCommand> {
       email: command.email,
       password: command.password,
     });
-
-    return { actionId: "<action-id>" };
   }
 }
