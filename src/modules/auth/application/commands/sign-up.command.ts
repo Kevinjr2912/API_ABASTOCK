@@ -1,6 +1,6 @@
 import { Command } from "@nestjs/cqrs";
 
-export class SignUpCommand extends Command <{ actionId: string }> {
+export class SignUpCommand extends Command <void> {
     constructor (
         public readonly id:             string,
         public readonly firstName:      string,

@@ -4,14 +4,14 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './modules/users/users.module';
 import { DatabaseModule } from './core/database/database.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { StoresModule } from './modules/stores/stores.module';
 import appConfig from './core/config/app.config';
 import databaseConfig from './core/config/database.config';
 import cloudinaryConfig from './core/config/cloudinary.config';
 import authConfig from './core/config/auth.config';
 import joiValidation from './core/config/validation/joi.validation';
-
 import { PostgreSQl } from './core/database/PostgreSQL';
-import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -30,7 +30,8 @@ import { ScheduleModule } from '@nestjs/schedule';
     ScheduleModule.forRoot(),
     DatabaseModule,
     AuthModule,
-    UsersModule
+    UsersModule,
+    StoresModule,
   ],
   controllers: [],
   providers: [PostgreSQl],
