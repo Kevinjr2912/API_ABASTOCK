@@ -1,6 +1,6 @@
 import { IsString, IsEmail, IsNotEmpty, MinLength, MaxLength, Matches, IsUUID, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { SignUpDto } from '../../application/dtos/input/SignUp.dto';
+import { SignUpDto } from '../../../application/dtos/input/SignUp.dto';
 
 export class SignUpRequestDto implements SignUpDto {
     @IsUUID()

@@ -5,12 +5,13 @@ import {
   HttpStatus,
   Post,
   Request,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { LocalAuthGuard } from '../guards/local-auth.guard';
 import { CommandBus } from '@nestjs/cqrs';
 import { SignUpCommand } from '../../application/commands/sign-up.command';
-import { SignUpRequestDto } from '../dto/SignUpRequest.dto';
+import { SignUpRequestDto } from '../dtos/requests/SignUpRequest.dto';
 import { SignInCommand } from '../../application/commands/sign-in.command';
 import { RefreshTokenCommand } from '../../application/commands/refresh-token.command';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
@@ -22,6 +23,7 @@ export class AuthController {
 
   @Post('sign-in')
   @UseGuards(LocalAuthGuard)
+  @HttpCode(HttpStatus.OK)
   login(@Request() req) {
     return this.commandBus.execute(new SignInCommand(req.user));
   }
@@ -42,9 +44,7 @@ export class AuthController {
       ),
     );
 
-    return {
-      message: 'User created successfully',
-    };
+    return { message: 'User created successfully' };
   }
 
   @Post('refresh-token')

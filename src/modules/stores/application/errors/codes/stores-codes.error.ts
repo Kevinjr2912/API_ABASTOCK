@@ -1,0 +1,3 @@
+export const STORES_ERROR_CODES = {
+  EXISTING_STORE: 'EXISTING_STORE'
+}

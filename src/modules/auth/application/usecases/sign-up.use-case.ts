@@ -3,7 +3,7 @@ import type { UserReadRepository } from 'src/modules/users/application/ports/use
 import type { HashPort } from '../ports/hash.port';
 import { User } from 'src/modules/users/domain/entities/User';
 import { SignUpDto } from '../dtos/input/SignUp.dto';
-import { EmailAlreadyTakenError } from '../errors/email-already-taken.error';
+import { EmailAlreadyTakenError } from '../../../users/application/errors/email-already-taken.error';
 
 export class SignUpUseCase {
   constructor(

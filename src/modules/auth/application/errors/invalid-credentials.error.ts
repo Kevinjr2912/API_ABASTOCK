@@ -1,8 +1,8 @@
 import { ApplicationError } from "src/core/errors/application-error";
-import { ERROR_CODES } from "src/core/errors/error-codes";
+import { AUTH_ERROR_CODES } from "./codes/codes.error";
 
 export class InvalidCredentialsError extends ApplicationError {
-  code = ERROR_CODES.INVALID_CREDENTIALS;
+  code = AUTH_ERROR_CODES.INVALID_CREDENTIALS;
 
   constructor() {
     super('Invalid email or password');

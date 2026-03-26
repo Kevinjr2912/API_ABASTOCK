@@ -52,7 +52,7 @@ import { SignOutUseCase } from './application/usecases/sign-out.use-case';
     { provide: 'TokenPort',               useClass: JwtAdapter },
     { provide: 'GeneratorUUIDPort',       useClass: GeneratorUUIDAdapter },
     { provide: 'SessionWriteRepository',  useClass: SessionWriteRepositoryImpl },
-    { provide: 'SessionReadRepository', useClass: SessionReadRepositoryImpl },
+    { provide: 'SessionReadRepository',   useClass: SessionReadRepositoryImpl },
 
     // Use cases
     {
