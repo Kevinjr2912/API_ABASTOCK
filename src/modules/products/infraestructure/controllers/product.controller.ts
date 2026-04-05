@@ -2,23 +2,32 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { CreateProductRequestDto } from '../dtos/requests/create-product-request.dto';
 import { CreateProductCommand } from '../../application/commands/create-product.command';
+import { GetCategoriesQuery } from '../../application/queries/get-categories.query';
+import { JwtAuthGuard } from 'src/modules/auth/infraestructure/guards/jwt-auth.guard';
+import { GetBrandsQuery } from '../../application/queries/get-brands.query';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly commandBus: CommandBus) {}
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus
+  ) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(FileInterceptor('image'))
   @HttpCode(HttpStatus.CREATED)
@@ -65,5 +74,17 @@ export class ProductController {
     );
 
     return { message: 'Product created successfully' };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/categories')
+  async getCategories() {
+    return this.queryBus.execute(new GetCategoriesQuery());
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/brands')
+  async getBrands() {
+    return this.queryBus.execute(new GetBrandsQuery());
   }
 }

@@ -4,12 +4,18 @@ import { ProductReadRepository } from '../../application/ports/product-read.repo
 import { ProductPresentation } from '../../domain/entities/product-presentation.entity';
 import { Product } from '../../domain/entities/product.entity';
 import { Barcode } from '../../domain/value-objects/bar-code.value-object';
+import { CategoryDto } from '../../application/dtos/outputs/category.dto';
+import { BrandDto } from '../../application/dtos/outputs/brand.dto';
 
 @Injectable()
 export class ProductReadRepositoryImpl implements ProductReadRepository {
   constructor(private readonly conn: PostgreSQl) {}
 
-  async findByNameBrandCategory( name: string, brandId: string, categoryId: string ): Promise<Product | null> {
+  async findByNameBrandCategory(
+    name: string,
+    brandId: string,
+    categoryId: string,
+  ): Promise<Product | null> {
     const sql = `
       SELECT
         p.product_id,
@@ -71,5 +77,35 @@ export class ProductReadRepositoryImpl implements ProductReadRepository {
       firstRow.name,
       presentations,
     );
+  }
+
+  async getCategories(): Promise<CategoryDto[]> {
+    const sql = `
+      SELECT category_id, name
+      FROM categories
+      ORDER BY name
+    `;
+
+    const result = await this.conn.query(sql);
+
+    return result.rows.map((row) => ({
+      categoryId: row.category_id,
+      name: row.name,
+    }));
+  }
+
+  async getBrands(): Promise<BrandDto[]> {
+    const sql = `
+        SELECT brand_id, name
+        FROM brands
+        ORDER BY name
+    `;
+
+    const result = await this.conn.query(sql);
+
+    return result.rows.map((row) => ({
+      brandId: row.brand_id,
+      name: row.name,
+    }));
   }
 }

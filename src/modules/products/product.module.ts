@@ -9,12 +9,18 @@ import { CloudinaryProvider } from "../../core/common/storage/infraestructure/pr
 import { ImageStoragePort } from "../../core/common/storage/application/ports/image-storage.port";
 import { ProductController } from "./infraestructure/controllers/product.controller";
 import { CreateProductCommandHandler } from "./application/commands/handlers/create-product.handler";
+import { GetCategoriesQueryHandler } from "./application/queries/handlers/get-categories.handler";
+import { GetCategoriesUseCase } from "./application/usecases/get-categories.use-case";
+import { GetBrandsQueryHandler } from "./application/queries/handlers/get-brands.handler";
+import { GetBrandsUseCase } from "./application/usecases/get-brands.use-case";
 
 @Module({
   imports: [StorageModule],
   providers: [
     // Handlers
     CreateProductCommandHandler,
+    GetCategoriesQueryHandler,
+    GetBrandsQueryHandler,
 
     // adapters
     CloudinaryProvider,
@@ -31,6 +37,20 @@ import { CreateProductCommandHandler } from "./application/commands/handlers/cre
       ) => new CreateProductUseCase(productWriteRepository, productReadRepository, imageStoragePort),
       inject: ['ProductWriteRepository', 'ProductReadRepository', 'ImageStoragePort'],
     },
+    {
+      provide: GetCategoriesUseCase,
+      useFactory: (
+        productReadRepository: ProductReadRepository
+      ) => new GetCategoriesUseCase(productReadRepository),
+      inject: ['ProductReadRepository'],
+    },
+    {
+      provide: GetBrandsUseCase,
+      useFactory: (
+        productReadRepository: ProductReadRepository
+      ) => new GetBrandsUseCase(productReadRepository),
+      inject: ['ProductReadRepository'],
+    }
   ],
   controllers: [ProductController]
 })
