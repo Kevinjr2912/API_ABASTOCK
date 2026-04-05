@@ -1,4 +1,4 @@
-import { ApplicationError } from "src/core/errors/application-error";
+import { ApplicationError } from "../../../../core/errors/application-error";
 import { STORES_ERROR_CODES } from "./codes/stores-codes.error";
 
 export class ExistingStoreError extends ApplicationError {

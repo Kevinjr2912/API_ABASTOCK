@@ -1,4 +1,4 @@
-import { ApplicationError } from "src/core/errors/application-error";
+import { ApplicationError } from "../../../../core/errors/application-error";
 import { USERS_ERROR_CODES } from "./codes/user-codes.error";
 
 export class EmailAlreadyTakenError extends ApplicationError {

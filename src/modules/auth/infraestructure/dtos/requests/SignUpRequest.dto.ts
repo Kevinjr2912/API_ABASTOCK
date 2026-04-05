@@ -1,16 +1,15 @@
 import { IsString, IsEmail, IsNotEmpty, MinLength, MaxLength, Matches, IsUUID, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { SignUpDto } from '../../../application/dtos/input/SignUp.dto';
 
-export class SignUpRequestDto implements SignUpDto {
+export class SignUpRequestDto {
     @IsUUID()
     @IsNotEmpty()
-    id: string;
+    id!: string;
 
     @IsString()
     @IsNotEmpty()
     @Transform(({ value }) => value?.trim())
-    firstName: string;
+    firstName!: string;
 
     @IsString()
     @IsOptional()
@@ -20,22 +19,22 @@ export class SignUpRequestDto implements SignUpDto {
     @IsString()
     @IsNotEmpty()
     @Transform(({ value }) => value?.trim())
-    firstSurname: string;
+    firstSurname!: string;
 
     @IsString()
     @IsNotEmpty()
     @Transform(({ value }) => value?.trim())
-    secondLastName: string;
+    secondLastName!: string;
 
     @IsString()
     @IsNotEmpty()
     @Matches(/^\+?[1-9]\d{9}$/, { message: 'Phone number must be 10 digits' })
-    phoneNumber: string;
+    phoneNumber!: string;
 
     @IsEmail()
     @IsNotEmpty()
     @Transform(({ value }) => value?.toLowerCase().trim())
-    email: string;
+    email!: string;
 
     @IsString()
     @IsNotEmpty()
@@ -45,5 +44,5 @@ export class SignUpRequestDto implements SignUpDto {
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/,
         { message: 'Password must include uppercase, lowercase, numbers and special characters' }
     )
-    password: string;
+    password!: string;
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserReadRepository } from '../application/ports/user-read.repository';
-import { PostgreSQl } from 'src/core/database/PostgreSQL';
 import { User } from '../domain/entities/User';
+import { PostgreSQl } from '../../../core/database/PostgreSQL';
 
 @Injectable()
 export class UserReadRepositoryImpl implements UserReadRepository {

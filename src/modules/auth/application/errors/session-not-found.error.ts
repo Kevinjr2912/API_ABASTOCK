@@ -1,4 +1,4 @@
-import { ApplicationError } from 'src/core/errors/application-error';
+import { ApplicationError } from "../../../../core/errors/application-error";
 import { AUTH_ERROR_CODES } from "./codes/codes.error";
 
 export class SessionNotFoundError extends ApplicationError {

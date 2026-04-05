@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { StoreReadRepository } from '../../application/ports/store-read.repository';
-import { PostgreSQl } from 'src/core/database/PostgreSQL';
+import { PostgreSQl } from '../../../../core/database/PostgreSQL';
 
 @Injectable()
 export class StoreReadRepositoryImpl implements StoreReadRepository {

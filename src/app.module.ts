@@ -6,6 +6,8 @@ import { UsersModule } from './modules/users/users.module';
 import { DatabaseModule } from './core/database/database.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { StoresModule } from './modules/stores/stores.module';
+import { ProductsModule } from './modules/products/product.module'
+
 import appConfig from './core/config/app.config';
 import databaseConfig from './core/config/database.config';
 import cloudinaryConfig from './core/config/cloudinary.config';
@@ -32,6 +34,7 @@ import { PostgreSQl } from './core/database/PostgreSQL';
     AuthModule,
     UsersModule,
     StoresModule,
+    ProductsModule
   ],
   controllers: [],
   providers: [PostgreSQl],

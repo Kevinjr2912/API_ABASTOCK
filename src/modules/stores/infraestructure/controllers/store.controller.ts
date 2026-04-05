@@ -2,7 +2,7 @@ import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateStoreRequestDto } from '../dtos/requests/CreateStoreRequestDto';
 import { CreateStoreCommand } from '../../application/commands/create-store.command';
-import { JwtAuthGuard } from 'src/modules/auth/infraestructure/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../../auth/infraestructure/guards/jwt-auth.guard';
 
 @Controller('stores')
 export class StoreController {

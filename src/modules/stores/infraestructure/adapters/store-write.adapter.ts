@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { StoreWriteRepository } from '../../domain/repositories/store-write.repository';
 import { Store } from '../../domain/entities/Store';
-import { PostgreSQl } from 'src/core/database/PostgreSQL';
+import { PostgreSQl } from '../../../../core/database/PostgreSQL';
 
 @Injectable()
 export class StoreWriteRepositoryImpl implements StoreWriteRepository {

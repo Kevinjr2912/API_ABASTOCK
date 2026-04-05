@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { PostgreSQl } from 'src/core/database/PostgreSQL';
+import { PostgreSQl } from '../../../../core/database/PostgreSQL';
 
 @Injectable()
 export class SessionCleanupJob {

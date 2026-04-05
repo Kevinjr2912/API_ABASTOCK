@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SessionReadRepository } from '../../application/ports/session-read.repository';
 import { UserSession } from '../../domain/entities/user-session.entity';
-import { PostgreSQl } from 'src/core/database/PostgreSQL';
+import { PostgreSQl } from '../../../../core/database/PostgreSQL';
 
 @Injectable()
 export class SessionReadRepositoryImpl implements SessionReadRepository {

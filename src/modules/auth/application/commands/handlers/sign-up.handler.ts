@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { SignUpUseCase } from 'src/modules/auth/application/usecases/sign-up.use-case';
 import { SignUpCommand } from '../sign-up.command';
+import { SignUpUseCase } from '../../usecases/sign-up.use-case';
 
 @CommandHandler(SignUpCommand)
 export class SignUpCommandHandler implements ICommandHandler<SignUpCommand> {
