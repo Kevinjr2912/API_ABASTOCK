@@ -27,7 +27,7 @@ import { GetBrandsUseCase } from "./application/usecases/get-brands.use-case";
     { provide: 'ProductReadRepository', useClass: ProductReadRepositoryImpl },
     { provide: 'ProductWriteRepository', useClass: ProductWriteRepositoryImpl },
 
-    // casos de uso
+    // use cases
     {
       provide: CreateProductUseCase,
       useFactory: (

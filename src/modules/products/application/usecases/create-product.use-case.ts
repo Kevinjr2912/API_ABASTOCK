@@ -5,6 +5,7 @@ import { CreateProductDto } from '../dtos/inputs/create-product.dto';
 import { ImageStoragePort } from '../../../../core/common/storage/application/ports/image-storage.port';
 import { ProductReadRepository } from '../ports/product-read.repository';
 import { Barcode } from '../../domain/value-objects/bar-code.value-object';
+import { CreatedProductDto } from '../dtos/outputs/created-product.dto';
 
 export class CreateProductUseCase {
   constructor(
@@ -13,7 +14,7 @@ export class CreateProductUseCase {
     private readonly imageStoragePort: ImageStoragePort,
   ) {}
 
-  async execute(dto: CreateProductDto): Promise<void> {
+  async execute(dto: CreateProductDto): Promise<CreatedProductDto> {
     const existingProduct = await this.productReadRepository.findByNameBrandCategory(
       dto.name,
       dto.brandId,
@@ -42,13 +43,27 @@ export class CreateProductUseCase {
       barcode,
     );
 
-    if (existingProduct) {
-      await this.productWriteRepository.addPresentation(presentation);
-      return;
+    if (existingProduct) await this.productWriteRepository.addPresentation(presentation);
+    
+    if (!existingProduct) {
+      const product = new Product(dto.productId, dto.categoryId, dto.brandId, dto.name);
+      product.addPresentation(presentation);
+      await this.productWriteRepository.save(product);
     }
 
-    const product = new Product(dto.productId, dto.categoryId, dto.brandId, dto.name);
-    product.addPresentation(presentation);
-    await this.productWriteRepository.save(product);
+    return {
+      productId,
+      productName: dto.name,
+      brandId: dto.brandId,
+      categoryId: dto.categoryId,
+      presentation: {
+        presentationId: presentation.getId(),
+        barcode: Number(barcode.getCode()),
+        imageUri: presentation.getImageUri(),
+        value: presentation.getValue(),
+        unit: presentation.getUnit(),
+        salePrice: presentation.getSalePrice(),
+      },
+    };
   }
 }
