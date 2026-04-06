@@ -4,106 +4,99 @@ import { Product } from '../../domain/entities/product.entity';
 import { ProductWriteRepository } from '../../domain/repositories/product-write.repository';
 import { PoolClient } from 'pg';
 import { Barcode } from '../../domain/value-objects/bar-code.value-object';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { TransactionalRepository } from 'src/core/common/transaction/infraestructure/repositories/transactional.repository';
 
 @Injectable()
-export class ProductWriteRepositoryImpl implements ProductWriteRepository {
-  constructor(private readonly conn: PostgreSQl) {}
+export class ProductWriteRepositoryImpl
+  extends TransactionalRepository
+  implements ProductWriteRepository
+{
+  constructor(db: PostgreSQl) {
+    super(db);
+  }
 
   async save(product: Product): Promise<void> {
-    const client = await this.conn.getClient();
+    const runner = this.getRunner();
     try {
-      await client.query('BEGIN');
-      await this.insertProduct(client, product);
-      await this.insertPresentation(client, product.getPresentations()[0]);
+      await runner.query('BEGIN');
+
+      await this.insertProduct(runner, product);
+      await this.insertPresentation(runner, product.getPresentations()[0]);
       await this.insertBarCode(
-        client,
+        runner,
         product.getPresentations()[0].getId(),
         product.getPresentations()[0].getBarcode(),
       );
-      await client.query('COMMIT');
+
+      await runner.query('COMMIT');
     } catch (err) {
-      await client.query('ROLLBACK');
+      await runner.query('ROLLBACK');
       throw err;
-    } finally {
-      client.release();
     }
   }
 
   async addPresentation(presentation: ProductPresentation): Promise<void> {
-    const client = await this.conn.getClient();
-    try {
-      await client.query('BEGIN');
-      await this.insertPresentation(client, presentation);
-      await this.insertBarCode(
-        client,
-        presentation.getId(),
-        presentation.getBarcode(),
-      );
-      await client.query('COMMIT');
-    } catch (err) {
-      await client.query('ROLLBACK');
-      throw err;
-    } finally {
-      client.release();
-    }
+    const runner = this.getRunner();
+    await this.insertPresentation(runner, presentation);
+    await this.insertBarCode(
+      runner,
+      presentation.getId(),
+      presentation.getBarcode(),
+    );
   }
 
-  private async insertProduct(
-    client: PoolClient,
-    product: Product,
+  async updateSalePrice(
+    presentationId: string,
+    salePrice: number,
   ): Promise<void> {
-    const sql = `
-      INSERT INTO products (product_id, category_id, brand_id, name)
-      VALUES ($1, $2, $3, $4)
-    `;
-    await client.query(sql, [
-      product.getId(),
-      product.getCategoryId(),
-      product.getBrandId(),
-      product.getName(),
-    ]);
+    const runner = this.getRunner();
+    await runner.query(
+      `UPDATE product_presentations SET sale_price = $2 WHERE presentation_id = $1`,
+      [presentationId, salePrice],
+    );
+  }
+
+  private async insertProduct(runner: any, product: Product): Promise<void> {
+    await runner.query(
+      `INSERT INTO products (product_id, category_id, brand_id, name)
+       VALUES ($1, $2, $3, $4)`,
+      [
+        product.getId(),
+        product.getCategoryId(),
+        product.getBrandId(),
+        product.getName(),
+      ],
+    );
   }
 
   private async insertPresentation(
-    client: PoolClient,
+    runner: any,
     presentation: ProductPresentation,
   ): Promise<void> {
-    const presentationSql = `
-      INSERT INTO product_presentations 
-        (presentation_id, product_id, image_uri, value, unit, sale_price)
-      VALUES ($1, $2, $3, $4, $5, $6)
-    `;
-    await client.query(presentationSql, [
-      presentation.getId(),
-      presentation.getProductId(),
-      presentation.getImageUri(),
-      presentation.getValue(),
-      presentation.getUnit(),
-      presentation.getSalePrice(),
-    ]);
+    await runner.query(
+      `INSERT INTO product_presentations (presentation_id, product_id, image_uri, value, unit, sale_price)
+       VALUES ($1, $2, $3, $4, $5, $6)`,
+      [
+        presentation.getId(),
+        presentation.getProductId(),
+        presentation.getImageUri(),
+        presentation.getValue(),
+        presentation.getUnit(),
+        presentation.getSalePrice(),
+      ],
+    );
   }
 
   private async insertBarCode(
-    client: PoolClient,
+    runner: any,
     presentationId: string,
     barCode: Barcode,
   ): Promise<void> {
-    const sql = `
-      INSERT INTO product_barcodes 
-        (product_barcode_id, presentation_id, barcode, is_active)
-      VALUES ($1, $2, $3, $4)
-    `;
-
-    await client.query(sql, [
-      barCode.getId(),
-      presentationId,
-      barCode.getCode(),
-      barCode.isEnabled(),
-    ]);
-  }
-
-  updateSalePrice(presentationId: string, salePrice: number): Promise<void> {
-    return Promise.resolve();
+    await runner.query(
+      `INSERT INTO product_barcodes (product_barcode_id, presentation_id, barcode, is_active)
+       VALUES ($1, $2, $3, $4)`,
+      [barCode.getId(), presentationId, barCode.getCode(), barCode.isEnabled()],
+    );
   }
 }

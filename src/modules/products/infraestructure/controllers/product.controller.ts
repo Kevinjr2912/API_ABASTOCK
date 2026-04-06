@@ -51,7 +51,7 @@ export class ProductController {
     const errors = await validate(dto);
     if (errors.length > 0) throw new BadRequestException(errors);
 
-    await this.commandBus.execute(
+    return await this.commandBus.execute(
       new CreateProductCommand(
         dto.storeId,
         dto.productId,
@@ -72,8 +72,6 @@ export class ProductController {
         },
       ),
     );
-
-    return { message: 'Product created successfully' };
   }
 
   @UseGuards(JwtAuthGuard)

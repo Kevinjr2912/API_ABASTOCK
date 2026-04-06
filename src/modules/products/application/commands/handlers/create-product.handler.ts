@@ -1,14 +1,15 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { CreateProductCommand } from "../create-product.command";
 import { CreateProductUseCase } from "../../usecases/create-product.use-case";
+import { CreatedProductDto } from "../../dtos/outputs/created-product.dto";
 
 @CommandHandler(CreateProductCommand)
-export class CreateProductCommandHandler implements ICommandHandler<CreateProductCommand, void> {
+export class CreateProductCommandHandler implements ICommandHandler<CreateProductCommand, CreatedProductDto> {
 
   constructor (private readonly createProductUseCase: CreateProductUseCase){}
 
-  async execute(command: CreateProductCommand): Promise<void> {
-    await this.createProductUseCase.execute({
+  async execute(command: CreateProductCommand): Promise<CreatedProductDto> {
+    return await this.createProductUseCase.execute({
       storeId: command.storeId,
       productId: command.productId,
       name: command.name,

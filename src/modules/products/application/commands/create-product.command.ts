@@ -1,6 +1,7 @@
 import { Command } from '@nestjs/cqrs';
+import { CreatedProductDto } from '../dtos/outputs/created-product.dto';
 
-export class CreateProductCommand extends Command<void> {
+export class CreateProductCommand extends Command<CreatedProductDto> {
   constructor(
     public readonly storeId: string,
     public readonly productId: string,
