@@ -9,6 +9,7 @@ import { StoresModule } from './modules/stores/stores.module';
 import { ProductsModule } from './modules/products/product.module'
 import { InventoriesModule } from './modules/inventories/inventory.module';
 import { PurchasesModule } from './modules/purchases/purchase.module';
+import { SalesModule } from './modules/sales/sales.module';
 
 import appConfig from './core/config/app.config';
 import databaseConfig from './core/config/database.config';
@@ -38,7 +39,8 @@ import { PostgreSQl } from './core/database/PostgreSQL';
     StoresModule,
     ProductsModule,
     InventoriesModule,
-    PurchasesModule
+    PurchasesModule,
+    SalesModule
   ],
   controllers: [],
   providers: [PostgreSQl],
