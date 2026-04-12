@@ -1,7 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import { PostgreSQl } from "src/core/database/PostgreSQL";
 import { InventoryReadRepository } from "../../application/ports/inventory-read.repository";
 import { InventoryProductDto } from "../../application/dtos/outputs/inventory-product.dto";
 
+@Injectable()
 export class InventoryReadRepositoryImpl implements InventoryReadRepository {
   constructor(private readonly conn: PostgreSQl){}
 
@@ -61,10 +63,10 @@ export class InventoryReadRepositoryImpl implements InventoryReadRepository {
     return result.rows;
   }
 
-  async findInventoryByStoreAndPresentation(storeId: string, presentationId: string): Promise<{inventoryId: string, currentStock: number, minStockAlert: number} | null> {
+  async findInventoryByStoreAndPresentation(storeId: string, presentationId: string): Promise<{inventoryId: string, currentStock: number} | null> {
 
     const sql = `
-      SELECT inventory_id, current_stock, min_stock_alert
+      SELECT inventory_id, current_stock
       FROM inventory
       WHERE store_id = $1 AND presentation_id = $2
       LIMIT 1

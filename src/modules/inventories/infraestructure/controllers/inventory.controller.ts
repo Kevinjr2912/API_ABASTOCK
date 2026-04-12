@@ -5,7 +5,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Param,
+  Query,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -33,14 +33,14 @@ export class InventoryController {
         dto.storeId,
         dto.presentationId,
       ),
-    );
+    );    
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('/scan')
   async scanByBarcode(
-    @Param('storeId') storeId: string,
-    @Param('barcode') barcode: string,
+    @Query('storeId') storeId: string,
+    @Query('barcode') barcode: string,
   ) {
     if (!storeId || !barcode) {
       throw new BadRequestException('storeId and barcode are required');
@@ -59,7 +59,7 @@ export class InventoryController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async listByStore(@Param('storeId') storeId: string) {
+  async listByStore(@Query('storeId') storeId: string) {
     if (!storeId) {
       throw new BadRequestException('storeId is required');
     }

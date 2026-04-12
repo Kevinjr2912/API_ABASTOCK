@@ -31,9 +31,9 @@ import { ListInventoryProductsUseCase } from './application/usecases/list-invent
     // use cases
     {
       provide: CreateInventoryUseCase,
-      useFactory: (inventoryWriteRepository: InventoryWriteRepository) =>
-        new CreateInventoryUseCase(inventoryWriteRepository),
-      inject: ['InventoryWriteRepository'],
+      useFactory: (inventoryWriteRepository: InventoryWriteRepository, inventoryReadRepository: InventoryReadRepository) =>
+        new CreateInventoryUseCase(inventoryWriteRepository, inventoryReadRepository),
+      inject: ['InventoryWriteRepository', 'InventoryReadRepository'],
     },
     {
       provide: FindProductByBarcodeUseCase,

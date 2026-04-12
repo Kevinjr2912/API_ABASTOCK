@@ -2,15 +2,19 @@ import { PostgreSQl } from '../../../core/database/PostgreSQL';
 import { User } from '../domain/entities/User';
 import { UserWriteRepository } from '../domain/repositories/user-write.repository';
 import { Injectable } from '@nestjs/common';
+import { TransactionalRepository } from 'src/core/common/transaction/infraestructure/repositories/transactional.repository';
 // import { EmailAlreadyTakenError } from '../application/errors/email-already-taken.error';
 // import { ForeignKeyViolationError } from 'src/core/errors/foreign-key-violation.error';
 // import { NotNullViolationError } from 'src/core/errors/not-null-violation.error';
 
 @Injectable()
-export class UserWriteRepositoryImpl implements UserWriteRepository {
-  constructor(private readonly conn: PostgreSQl) {}
+export class UserWriteRepositoryImpl extends TransactionalRepository implements UserWriteRepository {
+  constructor(db: PostgreSQl) {
+    super(db);
+  }
 
   async save(user: User): Promise<void> {
+    const runner = this.getRunner();
     const sql = `
         INSERT INTO users (
             user_id,
@@ -36,7 +40,7 @@ export class UserWriteRepositoryImpl implements UserWriteRepository {
       user.getPassword(),
     ];
 
-    const result = await this.conn.query(sql, params);
+    const result = await runner.query(sql, params);
 
     if (result.rowCount === 0) throw new Error('Error inserting user');
   }

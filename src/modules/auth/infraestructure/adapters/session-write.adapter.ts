@@ -2,12 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { SessionWriteRepository } from '../../domain/repositories/session-write.repository';
 import { UserSession } from '../../domain/entities/user-session.entity';
 import { PostgreSQl } from '../../../../core/database/PostgreSQL';
+import { TransactionalRepository } from 'src/core/common/transaction/infraestructure/repositories/transactional.repository';
 
 @Injectable()
-export class SessionWriteRepositoryImpl implements SessionWriteRepository {
-  constructor(private readonly conn: PostgreSQl) {}
+export class SessionWriteRepositoryImpl extends TransactionalRepository implements SessionWriteRepository {
+  constructor(db: PostgreSQl) {
+    super(db);
+  }
 
   async save(session: UserSession): Promise<void> {
+    const runner = this.getRunner();
     const sql = `
       INSERT INTO user_sessions (
         session_id, 
@@ -30,7 +34,7 @@ export class SessionWriteRepositoryImpl implements SessionWriteRepository {
       session.getExpiresAt(),
     ];
 
-    const result = await this.conn.query(sql, params);
+    const result = await runner.query(sql, params);
     if (result.rowCount === 0) throw new Error('Error saving user session');
   }
   
