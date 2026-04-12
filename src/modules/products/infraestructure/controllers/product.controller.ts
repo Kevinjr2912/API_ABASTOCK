@@ -19,7 +19,9 @@ import { CreateProductCommand } from '../../application/commands/create-product.
 import { GetCategoriesQuery } from '../../application/queries/get-categories.query';
 import { JwtAuthGuard } from 'src/modules/auth/infraestructure/guards/jwt-auth.guard';
 import { GetBrandsQuery } from '../../application/queries/get-brands.query';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes, ApiBody } from '@nestjs/swagger';
 
+@ApiTags('Products')
 @Controller('products')
 export class ProductController {
   constructor(
@@ -27,6 +29,27 @@ export class ProductController {
     private readonly queryBus: QueryBus
   ) {}
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Crear un producto con su presentación e imagen' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        image: {
+          type: 'string',
+          format: 'binary',
+          description: 'Archivo de imagen del producto (JPEG/PNG/WEBP)',
+        },
+        data: {
+          type: 'string',
+          description: 'Stringificado de CreateProductRequestDto (e.g. {"storeId":"...","name":"...","presentation":{...}})'
+        }
+      },
+    },
+  })
+  @ApiResponse({ status: 201, description: 'Producto guardado en BD e imagen en Cloudinary.' })
+  @ApiResponse({ status: 400, description: 'Estructura o imagen ausente / payload inválido.' })
   @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(FileInterceptor('image'))
@@ -80,12 +103,18 @@ export class ProductController {
     }
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Listar catálogo root de categorías' })
+  @ApiResponse({ status: 200, description: 'Retorna array de categorias disponibles.' })
   @UseGuards(JwtAuthGuard)
   @Get('/categories')
   async getCategories() {
     return this.queryBus.execute(new GetCategoriesQuery());
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Listar catálogo root de marcas' })
+  @ApiResponse({ status: 200, description: 'Retorna array de marcas disponibles.' })
   @UseGuards(JwtAuthGuard)
   @Get('/brands')
   async getBrands() {
