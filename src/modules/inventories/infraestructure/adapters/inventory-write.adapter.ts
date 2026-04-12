@@ -15,7 +15,7 @@ export class InventoryWriteRepositoryImpl extends TransactionalRepository implem
   async save(inventory: Inventory): Promise<void> {
     const runner = this.getRunner();
     await runner.query(
-      `INSERT INTO inventories (inventory_id, store_id, presentation_id, current_stock)
+      `INSERT INTO inventory (inventory_id, store_id, presentation_id, current_stock)
        VALUES ($1, $2, $3, $4)`,
       [
         inventory.getId(),

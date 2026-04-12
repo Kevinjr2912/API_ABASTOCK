@@ -2,13 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { StoreWriteRepository } from '../../domain/repositories/store-write.repository';
 import { Store } from '../../domain/entities/Store';
 import { PostgreSQl } from '../../../../core/database/PostgreSQL';
+import { TransactionalRepository } from 'src/core/common/transaction/infraestructure/repositories/transactional.repository';
 
 @Injectable()
-export class StoreWriteRepositoryImpl implements StoreWriteRepository {
+export class StoreWriteRepositoryImpl extends TransactionalRepository implements StoreWriteRepository {
 
-  constructor (private readonly conn: PostgreSQl){}
+  constructor(db: PostgreSQl) {
+    super(db);
+  }
 
   async save(store: Store): Promise<void> {
+    const runner = this.getRunner();
     const sql = `
       INSERT INTO stores (
         store_id,
@@ -19,7 +23,7 @@ export class StoreWriteRepositoryImpl implements StoreWriteRepository {
     `;
 
     const params = [store.getId(), store.getUserId(), store.getName()];
-    const result = await this.conn.query(sql, params);
+    const result = await runner.query(sql, params);
     if (result.rowCount === 0) throw new Error('Error inserting store');
   }
 }

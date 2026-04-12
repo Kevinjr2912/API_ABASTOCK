@@ -40,38 +40,44 @@ export class ProductController {
 
     let dto: CreateProductRequestDto;
     try {
-      const parsed = JSON.parse(rawData);
-      dto = plainToInstance(CreateProductRequestDto, parsed, {
-        enableImplicitConversion: true,
-      });
-    } catch {
-      throw new BadRequestException('Invalid JSON in data field');
-    }
+      try {
+        const parsed = JSON.parse(rawData);
+        dto = plainToInstance(CreateProductRequestDto, parsed, {
+          enableImplicitConversion: true,
+        });
+      } catch {
+        throw new BadRequestException('Invalid JSON in data field');
+      }
 
-    const errors = await validate(dto);
-    if (errors.length > 0) throw new BadRequestException(errors);
+      const errors = await validate(dto);
+      if (errors.length > 0) throw new BadRequestException(errors);
 
-    return await this.commandBus.execute(
-      new CreateProductCommand(
-        dto.storeId,
-        dto.productId,
-        dto.name,
-        dto.brandId,
-        dto.categoryId,
-        {
-          presentationId: dto.presentation.presentationId,
-          imagePath: file.path,
-          value: dto.presentation.value,
-          unit: dto.presentation.unit,
-          salePrice: dto.presentation.salePrice,
-          barcode: {
-            barcodeId: dto.presentation.barcode.barcodeId,
-            code: dto.presentation.barcode.code,
-            isActive: dto.presentation.barcode.isActive,
+      return await this.commandBus.execute(
+        new CreateProductCommand(
+          dto.storeId,
+          dto.productId,
+          dto.name,
+          dto.brandId,
+          dto.categoryId,
+          {
+            presentationId: dto.presentation.presentationId,
+            imagePath: file.path,
+            value: dto.presentation.value,
+            unit: dto.presentation.unit,
+            salePrice: dto.presentation.salePrice,
+            barcode: {
+              barcodeId: dto.presentation.barcode.barcodeId,
+              code: dto.presentation.barcode.code,
+              isActive: dto.presentation.barcode.isActive,
+            },
           },
-        },
-      ),
-    );
+        ),
+      );
+    } catch (error) {
+      const fs = await import('fs/promises');
+      await fs.unlink(file.path).catch(() => {});
+      throw error;
+    }
   }
 
   @UseGuards(JwtAuthGuard)
