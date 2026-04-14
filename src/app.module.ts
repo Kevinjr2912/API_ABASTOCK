@@ -10,6 +10,7 @@ import { ProductsModule } from './modules/products/product.module'
 import { InventoriesModule } from './modules/inventories/inventory.module';
 import { PurchasesModule } from './modules/purchases/purchase.module';
 import { SalesModule } from './modules/sales/sales.module';
+import { CommunicationsModule } from './modules/communications/communications.module';
 
 import appConfig from './core/config/app.config';
 import databaseConfig from './core/config/database.config';
@@ -40,7 +41,8 @@ import { PostgreSQl } from './core/database/PostgreSQL';
     ProductsModule,
     InventoriesModule,
     PurchasesModule,
-    SalesModule
+    SalesModule,
+    CommunicationsModule
   ],
   controllers: [],
   providers: [PostgreSQl],
