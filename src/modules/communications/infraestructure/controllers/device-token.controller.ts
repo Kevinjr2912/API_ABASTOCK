@@ -15,10 +15,10 @@ export class DeviceTokenController {
     private readonly summaryJob: DailySummaryJob,
   ) {}
 
-  @ApiBearerAuth()
+  /* @ApiBearerAuth() */
   @ApiOperation({ summary: 'Registrar el token de Firebase del dispositivo' })
   @ApiResponse({ status: 201, description: 'Token registrado exitosamente' })
-  @UseGuards(JwtAuthGuard)
+  /* @UseGuards(JwtAuthGuard) */
   @Post()
   async registerToken(@Body() dto: RegisterTokenDto) {
     await this.commandBus.execute(new RegisterDeviceTokenCommand(dto.userId, dto.token));

@@ -82,12 +82,12 @@ export class AuthController {
     return this.commandBus.execute(new RefreshTokenCommand(token));
   }
 
-  @ApiBearerAuth()
+  /* @ApiBearerAuth() */
   @ApiOperation({ summary: 'Cerrar sesión segura' })
   @ApiResponse({ status: 204, description: 'Sesión cerrada y eliminada para prevenir accesos.' })
   @ApiResponse({ status: 401, description: 'No autorizado / Token ausente o incorrecto.' })
   @Post('sign-out')
-  @UseGuards(JwtAuthGuard) 
+  /* @UseGuards(JwtAuthGuard) */ 
   @HttpCode(HttpStatus.NO_CONTENT)
   async signOut(@Request() req) {
     await this.commandBus.execute(new SignOutCommand(req.user.sessionId));

@@ -10,11 +10,11 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 export class StoreController {
   constructor(private readonly commandBus: CommandBus) {}
 
-  @ApiBearerAuth()
+  /* @ApiBearerAuth() */
   @ApiOperation({ summary: 'Registrar una nueva tienda/almacén' })
   @ApiResponse({ status: 201, description: 'La tienda ha sido creada y asociada al usuario.' })
   @ApiResponse({ status: 400, description: 'Datos incompletos o mal formados.' })
-  @UseGuards(JwtAuthGuard)
+  /* @UseGuards(JwtAuthGuard) */
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createStore(@Body() dto: CreateStoreRequestDto) {

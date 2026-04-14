@@ -12,7 +12,7 @@ export class DailySummaryJob {
     private readonly commandBus: CommandBus,
   ) {}
 
-  @Cron('0 21 * * *') // Every day at 9:00 PM
+  @Cron('59 23 * * *') 
   async handleDailySummary() {
     this.logger.log('Starting scheduled daily summary job via CommandBus...');
     try {

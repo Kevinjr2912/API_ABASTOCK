@@ -25,11 +25,11 @@ export class InventoryController {
     private readonly queryBus: QueryBus
   ) {}
 
-  @ApiBearerAuth()
+  /* @ApiBearerAuth() */
   @ApiOperation({ summary: 'Asociar una nueva presentación de producto a la tienda (Stock: 0)' })
   @ApiResponse({ status: 201, description: 'Inventario inicializado correctamente en cero.' })
   @ApiResponse({ status: 409, description: 'Ya existe un inventario para esa presentación.' })
-  @UseGuards(JwtAuthGuard)
+  /* @UseGuards(JwtAuthGuard) */
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() dto: CreateInventoryRequestDto) {
@@ -42,13 +42,13 @@ export class InventoryController {
     );    
   }
 
-  @ApiBearerAuth()
+  /* @ApiBearerAuth() */
   @ApiOperation({ summary: 'Escanear código de barras para venta (Ventanilla)' })
   @ApiQuery({ name: 'storeId', description: 'ID de la tienda local', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' })
   @ApiQuery({ name: 'barcode', description: 'Código de barras de la pistola escáner', example: '7501055310883' })
   @ApiResponse({ status: 200, description: 'Retorna datos del producto, presentación y current stock asociado.' })
   @ApiResponse({ status: 404, description: 'Producto no encontrado por código de barras.' })
-  @UseGuards(JwtAuthGuard)
+  /* @UseGuards(JwtAuthGuard) */
   @Get('/scan')
   async scanByBarcode(
     @Query('storeId') storeId: string,
@@ -69,11 +69,11 @@ export class InventoryController {
     return product;
   }
 
-  @ApiBearerAuth()
+  /* @ApiBearerAuth() */
   @ApiOperation({ summary: 'Listar todo el inventario de la tienda' })
   @ApiQuery({ name: 'storeId', description: 'ID de la tienda', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' })
   @ApiResponse({ status: 200, description: 'Retorna array completo del stock físico actual.' })
-  @UseGuards(JwtAuthGuard)
+  /* @UseGuards(JwtAuthGuard) */
   @Get()
   async listByStore(@Query('storeId') storeId: string) {
     if (!storeId) {

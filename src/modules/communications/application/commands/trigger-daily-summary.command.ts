@@ -1,3 +1,3 @@
 export class TriggerDailySummaryCommand {
-  constructor() {}
+  constructor() { }
 }

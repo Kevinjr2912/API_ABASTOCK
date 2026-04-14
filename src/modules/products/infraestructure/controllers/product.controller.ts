@@ -29,7 +29,7 @@ export class ProductController {
     private readonly queryBus: QueryBus
   ) {}
 
-  @ApiBearerAuth()
+  /* @ApiBearerAuth() */
   @ApiOperation({ summary: 'Crear un producto con su presentación e imagen' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -50,7 +50,7 @@ export class ProductController {
   })
   @ApiResponse({ status: 201, description: 'Producto guardado en BD e imagen en Cloudinary.' })
   @ApiResponse({ status: 400, description: 'Estructura o imagen ausente / payload inválido.' })
-  @UseGuards(JwtAuthGuard)
+  /* @UseGuards(JwtAuthGuard) */
   @Post()
   @UseInterceptors(FileInterceptor('image'))
   @HttpCode(HttpStatus.CREATED)
@@ -103,19 +103,19 @@ export class ProductController {
     }
   }
 
-  @ApiBearerAuth()
+  /* @ApiBearerAuth() */
   @ApiOperation({ summary: 'Listar catálogo root de categorías' })
   @ApiResponse({ status: 200, description: 'Retorna array de categorias disponibles.' })
-  @UseGuards(JwtAuthGuard)
+  /* @UseGuards(JwtAuthGuard) */
   @Get('/categories')
   async getCategories() {
     return this.queryBus.execute(new GetCategoriesQuery());
   }
 
-  @ApiBearerAuth()
+  /* @ApiBearerAuth() */
   @ApiOperation({ summary: 'Listar catálogo root de marcas' })
   @ApiResponse({ status: 200, description: 'Retorna array de marcas disponibles.' })
-  @UseGuards(JwtAuthGuard)
+  /* @UseGuards(JwtAuthGuard) */
   @Get('/brands')
   async getBrands() {
     return this.queryBus.execute(new GetBrandsQuery());
